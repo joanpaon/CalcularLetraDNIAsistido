@@ -15,6 +15,11 @@
  */
 package org.japo.java.forms;
 
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.net.URL;
@@ -28,7 +33,7 @@ import org.japo.java.lib.UtilesSwing;
  *
  * @author José A. Pacheco Ondoño - joanpaon@gmail.com
  */
-public class GUI extends javax.swing.JFrame {
+public class GUI extends javax.swing.JFrame implements ClipboardOwner {
 
     // Propiedades APP
     private Properties prpApp;
@@ -59,6 +64,11 @@ public class GUI extends javax.swing.JFrame {
         URL urlICN = ClassLoader.getSystemResource("img/favicon.png");
         setIconImage(new ImageIcon(urlICN).getImage());
 
+        // Icono Portapapeles
+        URL urlCLP = ClassLoader.getSystemResource("img/clipboard.png");
+        Image imgCLP = new ImageIcon(urlCLP).getImage();
+        UtilesSwing.asignarImagenEscalada(lblClip, imgCLP);
+
         // Otras inicializaciones
     }
 
@@ -69,12 +79,12 @@ public class GUI extends javax.swing.JFrame {
 
         // Establece Lnf
         UtilesSwing.establecerLnF(prpApp.getProperty("lnf",
-                UtilesSwing.WINDOWS));
+            UtilesSwing.WINDOWS));
 
         // Activa Singleton
         if (!UtilesApp.activarInstancia(
-                prpApp.getProperty("puerto_bloqueo",
-                        UtilesApp.PUERTO_BLOQUEO))) {
+            prpApp.getProperty("puerto_bloqueo",
+                UtilesApp.PUERTO_BLOQUEO))) {
             UtilesSwing.terminarPrograma(this);
         }
 
@@ -92,8 +102,8 @@ public class GUI extends javax.swing.JFrame {
 
         jTextField1 = new javax.swing.JTextField();
         txfDNI = new javax.swing.JTextField();
-        lblGuion = new javax.swing.JLabel();
         lblDNI = new javax.swing.JLabel();
+        lblClip = new javax.swing.JLabel();
 
         jTextField1.setText("jTextField1");
 
@@ -114,12 +124,22 @@ public class GUI extends javax.swing.JFrame {
                 txfDNIActionPerformed(evt);
             }
         });
-
-        lblGuion.setFont(new java.awt.Font("Consolas", 1, 48)); // NOI18N
-        lblGuion.setText("-");
+        txfDNI.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txfDNIKeyPressed(evt);
+            }
+        });
 
         lblDNI.setFont(new java.awt.Font("Consolas", 1, 48)); // NOI18N
         lblDNI.setText("*");
+
+        lblClip.setPreferredSize(new java.awt.Dimension(63, 63));
+        lblClip.setRequestFocusEnabled(false);
+        lblClip.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblClipMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -127,10 +147,10 @@ public class GUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(lblClip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(txfDNI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblGuion)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(lblDNI)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -138,10 +158,11 @@ public class GUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txfDNI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblGuion)
-                    .addComponent(lblDNI))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txfDNI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblDNI))
+                    .addComponent(lblClip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -157,10 +178,23 @@ public class GUI extends javax.swing.JFrame {
         gestionarNIF(evt);
     }//GEN-LAST:event_txfDNIActionPerformed
 
+    private void lblClipMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblClipMouseClicked
+        // Marca la operación
+        txfDNI.setBackground(new Color(184, 244, 244));
+
+        // Campo de texto > Portapapeles
+        UtilesSwing.ponerTextoPortapapeles(
+            txfDNI.getText() + lblDNI.getText(), this);
+    }//GEN-LAST:event_lblClipMouseClicked
+
+    private void txfDNIKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txfDNIKeyPressed
+        txfDNI.setBackground(Color.WHITE);
+    }//GEN-LAST:event_txfDNIKeyPressed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel lblClip;
     private javax.swing.JLabel lblDNI;
-    private javax.swing.JLabel lblGuion;
     private javax.swing.JTextField txfDNI;
     // End of variables declaration//GEN-END:variables
     //
@@ -202,5 +236,11 @@ public class GUI extends javax.swing.JFrame {
             // Publicar la letra
             lblDNI.setText("*");
         }
+    }
+
+    // Notificación Pérdida Propiedad Portapapeles
+    @Override
+    public void lostOwnership(Clipboard clipboard, Transferable contents) {
+        // No hacer nada
     }
 }
