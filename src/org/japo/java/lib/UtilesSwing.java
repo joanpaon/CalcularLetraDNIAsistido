@@ -87,7 +87,7 @@ public class UtilesSwing {
         lblImagen.setIcon(i);
     }
 
-    // Obtiene el texto copiado al portapapeles
+    // Portapapeles > Texto
     public static String obtenerTextoPortapapeles() {
         // Referencia al texto del portapapeles
         String result = "";
@@ -110,7 +110,7 @@ public class UtilesSwing {
         return result;
     }
 
-    // Coloca texto en el portapapeles
+    // Texto > Portapapeles
     public static void ponerTextoPortapapeles(String texto, ClipboardOwner propietario) {
         // Entidad que implementa la capacidad de transmitir texto
         StringSelection transmisor = new StringSelection(texto);

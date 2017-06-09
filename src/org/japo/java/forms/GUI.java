@@ -21,6 +21,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.net.URL;
 import java.util.Properties;
@@ -100,12 +101,9 @@ public class GUI extends javax.swing.JFrame implements ClipboardOwner {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
         txfDNI = new javax.swing.JTextField();
         lblDNI = new javax.swing.JLabel();
         lblClip = new javax.swing.JLabel();
-
-        jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Calcular NIF Asistido");
@@ -179,12 +177,7 @@ public class GUI extends javax.swing.JFrame implements ClipboardOwner {
     }//GEN-LAST:event_txfDNIActionPerformed
 
     private void lblClipMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblClipMouseClicked
-        // Marca la operación
-        txfDNI.setBackground(new Color(184, 244, 244));
-
-        // Campo de texto > Portapapeles
-        UtilesSwing.ponerTextoPortapapeles(
-            txfDNI.getText() + lblDNI.getText(), this);
+        gestionarPortapapeles(evt);
     }//GEN-LAST:event_lblClipMouseClicked
 
     private void txfDNIKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txfDNIKeyPressed
@@ -192,7 +185,6 @@ public class GUI extends javax.swing.JFrame implements ClipboardOwner {
     }//GEN-LAST:event_txfDNIKeyPressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblClip;
     private javax.swing.JLabel lblDNI;
     private javax.swing.JTextField txfDNI;
@@ -213,27 +205,25 @@ public class GUI extends javax.swing.JFrame implements ClipboardOwner {
     }
 
     public void gestionarNIF(ActionEvent e) {
-        // Texto introducido por el usuario
-        String texto = txfDNI.getText();
+        try {
+            // Texto introducido por el usuario
+            String texto = txfDNI.getText();
 
-        // Número de DNI
-        int numero = UtilesDNI.extraerNumeroDNI(texto);
+            // Número de DNI
+            int numero = Integer.parseInt(texto);
 
-        // Procesa el numero
-        if (UtilesDNI.validarNumeroDNI(numero)) {
-            // Calcular letra
-            char letra = UtilesDNI.calcularLetraDNI(numero);
+            // Procesa el numero
+            if (UtilesDNI.validarNumeroDNI(numero)) {
+                // Calcular letra
+                char letra = UtilesDNI.calcularLetraDNI(numero);
 
-            // Actualizar el interfaz
-            txfDNI.setText(numero + "");
-
-            // Publicar la letra
-            lblDNI.setText(letra + "");
-        } else {
-            // Actualizar el interfaz
-            txfDNI.setText("00000000");
-
-            // Publicar la letra
+                // Publicar la letra
+                lblDNI.setText(letra + "");
+            } else {
+                throw new Exception();
+            }
+        } catch (Exception ex) {
+            // DNI incorrecto
             lblDNI.setText("*");
         }
     }
@@ -242,5 +232,14 @@ public class GUI extends javax.swing.JFrame implements ClipboardOwner {
     @Override
     public void lostOwnership(Clipboard clipboard, Transferable contents) {
         // No hacer nada
+    }
+
+    private void gestionarPortapapeles(MouseEvent evt) {
+        // Señaliza Texto Copiado
+        txfDNI.setBackground(new Color(184, 244, 244));
+
+        // Campo de texto > Portapapeles
+        UtilesSwing.ponerTextoPortapapeles(
+            txfDNI.getText() + lblDNI.getText(), this);
     }
 }

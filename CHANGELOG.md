@@ -1,5 +1,16 @@
 <pre>
 
+Version 0.1.2 - 09/06/2017
+==========================
+
+Updates
+-------
+> README.md
+> CHANGELOG.md
+> org.japo.java.forms.GUI.java
+> org.japo.java.lib.UtilesSwing.java
+---
+
 Version 0.1.1 - 08/06/2017
 ==========================
 
