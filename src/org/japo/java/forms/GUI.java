@@ -46,6 +46,7 @@ public final class GUI extends JFrame implements ClipboardOwner {
     // Modelos
     private Document doc;
     private DocumentListener dem;
+    
     // Fuentes
     private Font fntDNI;
 
@@ -136,29 +137,25 @@ public final class GUI extends JFrame implements ClipboardOwner {
         // Establecer Favicon
         UtilesSwing.establecerFavicon(this, prp.getProperty("img_favicon_resource"));
 
-        // Ventana Principal - Propiedades
+        // Botón - Portapapeles
+        btnClip.setIcon(new ImageIcon(UtilesSwing.escalarImagen(imgClip, 64, 64)));
+
+        // Campo de Texto - Número de DNI
+        txfDNI.setFont(fntDNI.deriveFont(Font.PLAIN, 80f));
+        txfDNI.setColumns(8);
+
+        // Modelo Campo de Texto - Número de DNI
+        doc = txfDNI.getDocument();
+
+        // Etiqueta - Control de DNI
+        lblDNI.setFont(fntDNI.deriveFont(Font.PLAIN, 80f));
+
+        // Ventana Principal
         setTitle(prp.getProperty("form_title"));
         int width = Integer.parseInt(prp.getProperty("form_width"));
         int height = Integer.parseInt(prp.getProperty("form_height"));
         setSize(width, height);
         setLocationRelativeTo(null);
-
-        // Botón portapapeles
-        btnClip.setIcon(new ImageIcon(UtilesSwing.escalarImagen(imgClip, 64, 64)));
-        btnClip.setFocusable(false);
-
-        // Campo de Texto - Número de DNI
-        txfDNI.setFont(fntDNI.deriveFont(Font.PLAIN, 80f));
-
-        // Modelo Campo de Texto - Número de DNI
-        doc = txfDNI.getDocument();
-
-        // Gestor de Eventos de Documento - Número de DNI
-        dem = new DEM(this);
-
-        // Etiqueta - Control de DNI
-        lblDNI.setFont(fntDNI.deriveFont(Font.PLAIN, 80f));
-        lblDNI.setBorder(txfDNI.getBorder());
 
         // Ajustes de tamaño
         btnClip.setPreferredSize(new Dimension(
@@ -167,6 +164,9 @@ public final class GUI extends JFrame implements ClipboardOwner {
         lblDNI.setPreferredSize(new Dimension(
                 lblDNI.getPreferredSize().width + 2,
                 txfDNI.getPreferredSize().height));
+
+        // Gestor de Eventos de Documento - Número de DNI
+        dem = new DEM(this);
 
         // Registra Gestores de Eventos
         doc.addDocumentListener(dem);
