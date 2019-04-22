@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 José A. Pacheco Ondoño - joanpaon@gmail.com.
+ * Copyright 2019 José A. Pacheco Ondoño - joanpaon@gmail.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,27 +15,36 @@
  */
 package org.japo.java.events;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import org.japo.java.forms.GUI;
 
 /**
  *
  * @author José A. Pacheco Ondoño - joanpaon@gmail.com
  */
-public class CEM implements ChangeListener {
+public final class DEM implements DocumentListener {
 
-    // Referencia al Interfaz
+    // Referencia al GUI
     private final GUI gui;
 
     // Constructor
-    public CEM(GUI gui) {
+    public DEM(GUI gui) {
         this.gui = gui;
     }
 
     @Override
-    public void stateChanged(ChangeEvent e) {
-        // gui.procesarCambio(e);
+    public void insertUpdate(DocumentEvent e) {
+        gui.procesarCambioTexto(e);
     }
 
+    @Override
+    public void removeUpdate(DocumentEvent e) {
+        gui.procesarCambioTexto(e);
+    }
+
+    @Override
+    public void changedUpdate(DocumentEvent e) {
+        // Plain text components do not fire these events
+    }
 }
